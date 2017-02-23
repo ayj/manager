@@ -32,8 +32,14 @@ mainFlow(utils) {
   if (utils.runStage('POSTSUBMIT')) {
     buildNode(gitUtils) {
       bazel.updateBazelRc()
-      // TODO(sebastienvas) add necessary docker hub credentials here
-      sh 'docker/release-docker --hub docker.io/istio --tags ' gitUtils.GIT_SHA ',$(date +%Y%m%d%H%M%S)' 
+      def images = 'init'
+      def credentialId = env.ISTIO_TESTING_DOCKERHUB
+      withDockerRegistry([credentialsId: credentialId]) {
+        sh("docker/release-docker " +
+            "-h docker.io/istio " +
+            "-t ${gitUtils.GIT_SHA},\$(date +%Y%m%d%H%M%S) " +
+            "-i ${images}")
+      }
     }
   }
 }
