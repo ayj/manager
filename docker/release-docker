@@ -1,40 +1,44 @@
-#!/bin/sh
+#!/bin/bash
 
 # Example usage:
 #
-# docker/release-docker --hub docker.io/istio --tags $(git rev-parse --short HEAD),$(date +%Y%m%d%H%M%S)"
+# docker/release-docker -h docker.io/istio \
+#  -t $(git rev-parse --short HEAD),$(date +%Y%m%d%H%M%S)" \
+#  -i "init,init_debug,app,app_debug,runtime,runtime_debug"
 
 function usage() {
-    echo "$0 --hub <docker image repository> --tags <comma seperated list of docker image tags>"
-    exit 1
+  echo "$0 \
+    -h <docker image repository> \
+    -t <comma separated list of docker image tags> \
+    -i <comma separated list of docker images>"
+  exit 1
 }
 
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --hub) hub="$2"; shift ;;
-        --tags) tags="$2"; shift ;;
-        *) usage ;;
-    esac
-    shift
+
+while getopts :h:i:t:: arg; do
+  case ${arg} in
+    h) HUB="${OPTARG}";;
+    i) IMAGES="${OPTARG}";;
+    t) TAGS="${OPTARG}";;
+  esac
 done
 
-[[ -z $hub ]] && usage
-[[ -z $tags ]] && usage
+[[ -z "${HUB}" ]] && usage
+[[ -z "${TAGS}" ]] && usage
+[[ -z "${IMAGES}" ]] && usage
 
-tags=$(echo $tags | sed -e 's/,/ /g')
+IFS=',' read -ra TAGS <<< "${TAGS}"
+IFS=',' read -ra IMAGES <<< "${IMAGES}"
 
-# TODO expose list of images as command line flag?
-images="init init_debug app app_debug runtime runtime_debug"
-
-if [[ "$hub" =~ ^gcr\.io ]]; then
+if [[ "${HUB}" =~ ^gcr\.io ]]; then
     gcloud docker --authorize-only
 fi
 
 set -ex
 
-for image in $images; do
-    for tag in $tags; do
-        bazel $BAZEL_ARGS run //docker:$image $hub/$image:$tag
-        docker push $hub/$image:$tag
+for IMAGE in "${IMAGES[@]}"; do
+    for TAG in "${TAGS[@]}"; do
+        bazel ${BAZEL_STARTUP_ARGS} run "//docker:${IMAGE}" "${HUB}/${IMAGE}:${TAG}"
+        docker push "${HUB}/${IMAGE}:${TAG}"
     done
 done
