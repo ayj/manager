@@ -38,7 +38,7 @@ import (
 // resources.
 const (
 	DefaultHub              = "docker.io/istio"
-	DefaultTag              = "2017-03-22-17.30.06"
+	DefaultTag              = "2017-03-22-21.21.48"
 	DefaultManagerAddr      = "istio-manager:8080"
 	DefaultMixerAddr        = "istio-mixer:9091"
 	DefaultSidecarProxyUID  = int64(1337)
