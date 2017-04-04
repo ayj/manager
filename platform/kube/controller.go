@@ -679,13 +679,12 @@ func (c *Controller) AppendInstanceHandler(f func(*model.ServiceInstance, model.
 	c.endpoints.handler.append(func(obj interface{}, event model.Event) error {
 		ep := *obj.(*v1.Endpoints)
 		item, exists := c.serviceByKey(ep.Name, ep.Namespace)
-		var svc *model.Service
 		if exists {
-			svc = convertService(*item)
+			svc := convertService(*item)
+			// TODO: we're passing an incomplete instance to the
+			// handler since endpoints is an aggregate structure
+			f(&model.ServiceInstance{Service: svc}, event)
 		}
-		// TODO: we're passing an incomplete instance to the handler since endpoints is an aggregate
-		// structure
-		f(&model.ServiceInstance{Service: svc}, event)
 		return nil
 	})
 	return nil

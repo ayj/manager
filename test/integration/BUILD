@@ -19,21 +19,19 @@ go_library(
     ],
 )
 
+filegroup(
+    name = "templates",
+    srcs = glob(["*.tmpl"]),
+    visibility = ["//visibility:public"],
+)
+
 go_binary(
     name = "integration",
     data = [
-        "app.yaml.tmpl",
         "cert.crt",
         "cert.key",
-        "egress-proxy.yaml.tmpl",
         "ingress.yaml",
-        "ingress-proxy.yaml.tmpl",
-        "manager-discovery.yaml.tmpl",
-        "mixer.yaml.tmpl",
-        "rule-content-route.yaml.tmpl",
-        "rule-default-route.yaml.tmpl",
-        "rule-fault-injection.yaml.tmpl",
-        "rule-weighted-route.yaml.tmpl",
+        ":templates",
         "//platform/kube:kubeconfig",
     ],
     library = ":go_default_library",

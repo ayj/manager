@@ -216,6 +216,12 @@ new_go_repository(
 )
 
 new_go_repository(
+    name = "com_github_montanaflynn_stats",
+    commit = "f8cd06f93c6c1b06028caafb88b540fc820f77c1", # 11-2-2016
+    importpath = "github.com/montanaflynn/stats",
+)
+
+new_go_repository(
     name = "org_golang_x_crypto",
     commit = "1f22c0103821b9390939b6776727195525381532",
     importpath = "golang.org/x/crypto",
