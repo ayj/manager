@@ -249,6 +249,32 @@ var (
 			return nil
 		},
 	}
+
+	serviceConfigCmd = &cobra.Command{
+		Use:          "serviceConfig",
+		Short:        "Mixer service config",
+		SilenceUsage: true,
+	}
+
+	serviceConfigCreateCmd = &cobra.Command{
+		Use:   "create <rule>",
+		Short: "Create service config rule",
+		RunE: func(c *cobra.Command, args []string) error {
+			if len(args) != 2 {
+				return errors.New(c.UsageString())
+			}
+			path, rule := args[0], args[1]
+
+			return nil
+		},
+	}
+	serviceConfigGetCmd = &cobra.Command{
+		Use:   "get <rule>",
+		Short: "Get service config rule",
+		RunE: func(c *cobra.Command, args []string) error {
+			return nil
+		},
+	}
 )
 
 func init() {
@@ -265,6 +291,10 @@ func init() {
 	getCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "short",
 		"Output format. One of:yaml|short")
 
+	serviceConfigCmd.AddCommand(serviceConfigCreateCmd)
+	serviceConfigCmd.AddCommand(serviceConfigGetCmd)
+	rootCmd.AddCommand(serviceConfigCmd)
+
 	cmd.AddFlags(rootCmd)
 
 	rootCmd.AddCommand(postCmd)
@@ -273,6 +303,7 @@ func init() {
 	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(injectCmd)
 	rootCmd.AddCommand(version.VersionCmd)
+
 }
 
 func main() {
