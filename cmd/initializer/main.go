@@ -38,7 +38,7 @@ func getRootCmd() *cobra.Command {
 	}{}
 
 	rootCmd := &cobra.Command{
-		Use:   "sidecar-initializer",
+		Use:   "initializer",
 		Short: "Kubernetes initializer for Istio sidecar",
 		RunE: func(*cobra.Command, []string) error {
 			restConfig, client, err := kube.CreateInterface(flags.kubeconfig)

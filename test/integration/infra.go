@@ -169,7 +169,7 @@ func (infra *infra) setup() error {
 	// but Subsequent modifications with 'apply' fail with the
 	// message:
 	//
-	// 		The Deployment "istio-sidecar-initializer" is invalid:
+	// 		The Deployment "istio-initializer" is invalid:
 	// 		metadata.initializers: Invalid value: "null": field is
 	// 		immutable once initialization has completed.
 	//

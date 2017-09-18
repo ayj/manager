@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: istio-sidecar-initializer-service-account
+  name: istio-initializer-service-account
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: istio-sidecar-initializer
+  name: istio-initializer
   annotations:
     sidecar.istio.io/inject: "false"
 {{if .UseInitializer }}
@@ -15,21 +15,21 @@ metadata:
     pending: []
 {{end}}
   labels:
-    istio: istio-sidecar-initializer
+    istio: istio-initializer
 spec:
   replicas: 1
   template:
     metadata:
-      name: istio-sidecar-initializer
+      name: istio-initializer
       labels:
-        istio: sidecar-initializer
+        istio: initializer
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: istio-sidecar-initializer-service-account
+      serviceAccountName: istio-initializer-service-account
       containers:
-        - name: sidecar-initializer
-          image: {{.Hub}}/sidecar_initializer:{{.Tag}}
+        - name: initializer
+          image: {{.Hub}}/initializer:{{.Tag}}
           imagePullPolicy: IfNotPresent
           args:
             - --port=8083

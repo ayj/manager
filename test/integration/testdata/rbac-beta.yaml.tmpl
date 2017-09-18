@@ -48,7 +48,7 @@ rules:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: istio-sidecar-initializer-{{.IstioNamespace}}
+  name: istio-initializer-{{.IstioNamespace}}
 rules:
 - apiGroups: ["*"]
   resources: ["deployments", "statefulsets", "jobs", "cronjobs", "daemonsets", "replicasets", "replicationcontrollers"]
@@ -130,13 +130,13 @@ roleRef:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: istio-sidecar-initializer-admin-role-binding-{{.IstioNamespace}}
+  name: istio-initializer-admin-role-binding-{{.IstioNamespace}}
 subjects:
 - kind: ServiceAccount
-  name: istio-sidecar-initializer-service-account
+  name: istio-initializer-service-account
   namespace: {{.IstioNamespace}}
 roleRef:
   kind: ClusterRole
-  name: istio-sidecar-initializer-{{.IstioNamespace}}
+  name: istio-initializer-{{.IstioNamespace}}
   apiGroup: rbac.authorization.k8s.io
 ---

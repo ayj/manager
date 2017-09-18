@@ -43,7 +43,7 @@ echo "Prior to running this script, make sure to run 'dep ensure' to pull vendor
 
 go build ./cmd/pilot-agent
 go build ./cmd/pilot-discovery
-go build ./cmd/sidecar-initializer
+go build ./cmd/initializer
 go build ./test/server
 go build ./test/client
 
@@ -52,7 +52,7 @@ cp -f  client docker/client
 cp -f  server docker/server
 cp -f  pilot-agent docker/pilot-agent
 cp -f  pilot-discovery docker/pilot-discovery
-cp -f  sidecar-initializer docker/sidecar-initializer
+cp -f  initializer docker/initializer
 
 # Build and push images
 if [[ "$hub" =~ ^gcr\.io ]]; then
@@ -60,7 +60,7 @@ if [[ "$hub" =~ ^gcr\.io ]]; then
 fi
 
 pushd docker
-  for image in app proxy proxy_init proxy_debug pilot sidecar_initializer; do
+  for image in app proxy proxy_init proxy_debug pilot initializer; do
     docker build -f "Dockerfile.${image}" -t "$hub/$image:$tag" .
     docker push "$hub/$image:$tag"
   done

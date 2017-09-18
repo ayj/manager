@@ -17,7 +17,7 @@ go_library(
 )
 
 go_binary(
-    name = "sidecar-initializer",
+    name = "initializer",
     library = ":go_default_library",
     visibility = ["//visibility:public"],
 )
